@@ -22,8 +22,7 @@ public class LockerService {
     }
 
     public String lock(Long lockerId) {
-        Locker existingLocker = lockerRepository.getLocker(lockerId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 번호의 보관함이 존재하지 않습니다."));
+        Locker existingLocker = getLocker(lockerId);
         if (existingLocker instanceof LockerInUse) {
             throw new IllegalStateException("해당 보관함은 이미 사용 중입니다.");
         }
@@ -34,8 +33,7 @@ public class LockerService {
     }
 
     public Long unlock(Long lockerId, String passwordInput) {
-        Locker existingLocker = lockerRepository.getLocker(lockerId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 번호의 보관함이 존재하지 않습니다."));
+        Locker existingLocker = getLocker(lockerId);
         if (!(existingLocker instanceof LockerInUse lockerInUse)) {
             throw new IllegalStateException("해당 보관함은 비어 있습니다.");
         }
@@ -45,6 +43,11 @@ public class LockerService {
         LocalDateTime endDateTime = dateTimeGenerator.generate();
         lockerRepository.replaceLocker(new Locker(lockerId, lockerInUse.getSize()));
         return lockerInUse.calculateFee(endDateTime);
+    }
+
+    public Locker getLocker(Long lockerId) {
+        return lockerRepository.getLocker(lockerId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 번호의 보관함이 존재하지 않습니다."));
     }
 
     public List<Long> getEmptyLockerIds() {
