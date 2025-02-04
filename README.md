@@ -44,4 +44,4 @@
    <img width="280" alt="Image" src="https://github.com/user-attachments/assets/79521d9f-8ffe-4f27-a301-77c62094c800" />
 
 ## 클래스 다이어그램
-
+   <img width="800" src="https://github.com/user-attachments/assets/58ca9c52-a562-4e2e-b087-5691f94c3716" />
