@@ -15,7 +15,12 @@ public abstract class LockerView extends View {
     }
 
     private void validateMenuInput(String input) {
-        int number = Integer.parseInt(input);
+        int number;
+        try {
+            number = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("올바른 입력이 아닙니다.");
+        }
         if (number < 1 || number > 3) {
             throw new IllegalArgumentException("올바른 선택지가 아닙니다.");
         }
@@ -33,7 +38,11 @@ public abstract class LockerView extends View {
 
     public Integer readLockerIdInput() {
         Scanner scanner = new Scanner(System.in);
-        return Integer.valueOf(scanner.nextLine());
+        try {
+            return Integer.valueOf(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("올바른 입력이 아닙니다.");
+        }
     }
 
     public void writeGreeting() {
