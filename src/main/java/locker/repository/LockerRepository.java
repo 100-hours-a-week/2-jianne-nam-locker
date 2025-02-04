@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface LockerRepository {
 
-    Optional<Locker> getLocker(Long id);
+    Optional<Locker> getLocker(Integer id);
     void replaceLocker(Locker locker);
     List<Locker> getLockersInUse();
     boolean isAllInUse();
