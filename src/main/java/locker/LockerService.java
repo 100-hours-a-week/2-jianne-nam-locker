@@ -22,21 +22,24 @@ public class LockerService {
     }
 
     public String lock(Long lockerId) {
-        Locker existingLocker = getLocker(lockerId);
-        if (existingLocker instanceof LockerInUse) {
-            throw new IllegalStateException("해당 보관함은 이미 사용 중입니다.");
-        }
+        Locker emptyLocker = getEmptyLocker(lockerId);
         String password = passwordGenerator.generate();
         lockerRepository.replaceLocker(new LockerInUse(
-                lockerId, existingLocker.getSize(), dateTimeGenerator.generate(), password));
+                lockerId, emptyLocker.getSize(), dateTimeGenerator.generate(), password));
         return password;
     }
 
-    public Long unlock(Long lockerId, String passwordInput) {
-        Locker existingLocker = getLocker(lockerId);
-        if (!(existingLocker instanceof LockerInUse lockerInUse)) {
-            throw new IllegalStateException("해당 보관함은 비어 있습니다.");
+    public Locker getEmptyLocker(Long lockerId) {
+        Locker emptyLocker = lockerRepository.getLocker(lockerId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 번호의 보관함이 존재하지 않습니다."));
+        if (emptyLocker instanceof LockerInUse) {
+            throw new IllegalStateException("해당 보관함은 이미 사용 중입니다.");
         }
+        return emptyLocker;
+    }
+
+    public Long unlock(Long lockerId, String passwordInput) {
+        LockerInUse lockerInUse = getLockerInUse(lockerId);
         if (!lockerInUse.matchPassword(passwordInput)) {
             throw new IllegalStateException("틀린 암호입니다.");
         }
@@ -45,9 +48,13 @@ public class LockerService {
         return lockerInUse.calculateFee(endDateTime);
     }
 
-    public Locker getLocker(Long lockerId) {
-        return lockerRepository.getLocker(lockerId)
+    public LockerInUse getLockerInUse(Long lockerId) {
+        Locker existingLocker = lockerRepository.getLocker(lockerId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 번호의 보관함이 존재하지 않습니다."));
+        if (!(existingLocker instanceof LockerInUse lockerInUse)) {
+            throw new IllegalStateException("해당 보관함은 비어 있습니다.");
+        }
+        return lockerInUse;
     }
 
     public List<Long> getEmptyLockerIds() {

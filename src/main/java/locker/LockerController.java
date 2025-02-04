@@ -49,6 +49,7 @@ public class LockerController {
         try {
             lockerView.writeLockerNumberCommandForLocking();
             Long idInput = lockerView.readLockerIdInput();
+            lockerService.getEmptyLocker(idInput);
             lockerView.writeLockerPassword(idInput, lockerService.lock(idInput));
         } catch (RuntimeException e) {
             lockerView.show("\n" + e.getMessage() + "\n");
@@ -71,7 +72,7 @@ public class LockerController {
         try {
             lockerView.writeLockerNumberCommandForUnlocking();
             Long idInput = lockerView.readLockerIdInput();
-            lockerService.getLocker(idInput);
+            lockerService.getLockerInUse(idInput);
             return idInput;
         } catch (RuntimeException e) {
             lockerView.show("\n" + e.getMessage() + "\n");
