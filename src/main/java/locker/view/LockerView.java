@@ -38,7 +38,11 @@ public abstract class LockerView extends View {
 
     public Integer readLockerIdInput() {
         Scanner scanner = new Scanner(System.in);
-        return Integer.valueOf(scanner.nextLine());
+        try {
+            return Integer.valueOf(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("올바른 입력이 아닙니다.");
+        }
     }
 
     public void writeGreeting() {
