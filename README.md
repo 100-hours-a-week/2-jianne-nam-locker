@@ -15,19 +15,33 @@
       - 암호를 틀리면 메인으로 돌아가도록 한다.
    - 잠금이 풀렸다는 메시지와 요금을 계산하여 출력한다.
 
-## 동작 설명
-### 정상 흐름
-1. 물품 보관
-2. 물품 회수
-3. 종료
-### 모든 보관함이 비었을 때 회수
-### 물품 회수시 이미 빈 보관함을 선택
-### 물품 보관시 이미 사용 중인 보관함을 선택
-### 잘못된 입력일 때
-1. 수가 아닐 때
-2. 범위를 넘었을 때
-### 암호가 틀렸을 때
+## 동작 과정
+### 1. 정상 흐름 - 물품 보관
+  <img width="300" alt="Image" src="https://github.com/user-attachments/assets/d747ad63-643b-4f6a-aba6-8e07841010e4" />
 
+### 2. 정상 흐름 - 물품 회수
+   <img width="310" alt="Image" src="https://github.com/user-attachments/assets/14319010-5f01-4682-838f-0b4d75820170" />
+
+### 3. 정상 흐름 - 종료
+   <img width="260" alt="Image" src="https://github.com/user-attachments/assets/35c65e79-7144-4755-942d-b938e3fe48fb" />
+
+### 4. 모든 보관함이 비었을 때 회수
+   <img width="180" alt="Image" src="https://github.com/user-attachments/assets/12fad3d5-2053-4957-ba6a-86cc6031ea08" />
+
+### 5. 물품 회수시 이미 빈 보관함을 선택
+   <img width="320" alt="Image" src="https://github.com/user-attachments/assets/8a4e2087-e323-4e39-a191-f57ae8a6a6bb" />
+
+### 6. 물품 보관시 이미 사용 중인 보관함을 선택
+   <img width="300" alt="Image" src="https://github.com/user-attachments/assets/dd56665a-abee-4a47-9c26-ace4a55e7738" />
+
+### 7. 잘못된 입력일 때 - 수가 아닐 때
+   <img width="300" alt="Image" src="https://github.com/user-attachments/assets/782c9a9b-ffac-43cb-b968-a5eda5e52562" />
+
+### 8. 잘못된 입력일 때 - 범위를 넘었을 때
+   <img width="280" alt="Image" src="https://github.com/user-attachments/assets/ff8e382a-700b-4662-850a-b1ec1fc5b35f" />
+
+### 9.암호가 틀렸을 때
+   <img width="280" alt="Image" src="https://github.com/user-attachments/assets/79521d9f-8ffe-4f27-a301-77c62094c800" />
 
 ## 클래스 다이어그램
 
