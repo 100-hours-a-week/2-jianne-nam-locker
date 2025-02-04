@@ -44,6 +44,14 @@ public abstract class LockerView extends View {
         this.show(DIVIDER + "\n1. 물품 보관\n2. 물품 회수\n3. 종료\n" + DIVIDER + "\n");
     }
 
+    public void writeNoEmptyLockers() {
+        this.show("물품을 넣을 보관함이 없습니다.\n");
+    }
+
+    public void writeNoLockersInUse() {
+        this.show("물품을 회수할 보관함이 없습니다.\n");
+    }
+
     public void writeExit() {
         this.show(DIVIDER + "\n서비스를 종료합니다.\n감사합니다.\n");
     }

@@ -2,6 +2,8 @@ package locker;
 
 import locker.view.LockerView;
 
+import java.util.List;
+
 public class LockerController {
 
     private final LockerView lockerView;
@@ -40,7 +42,12 @@ public class LockerController {
     }
 
     private void lock() {
-        lockerView.show(lockerView.status(lockerService.getEmptyLockerIds()));
+        if (lockerService.isAllInUse()) {
+            lockerView.writeNoEmptyLockers();
+            return;
+        }
+        List<Long> emptyLockerIds = lockerService.getEmptyLockerIds();
+        lockerView.show(lockerView.status(emptyLockerIds));
         readIdForLocking();
         lockerView.readEnter();
     }
@@ -58,7 +65,12 @@ public class LockerController {
     }
 
     private void unlock() {
-        lockerView.show(lockerView.status(lockerService.getEmptyLockerIds()));
+        List<Long> emptyLockerIds = lockerService.getEmptyLockerIds();
+        if (emptyLockerIds.isEmpty()) {
+            lockerView.writeNoLockersInUse();
+            return;
+        }
+        lockerView.show(lockerView.status(emptyLockerIds));
         Long id = readIdForUnlocking();
         try {
             lockerView.writeLockerFee(id, unlockAndGetFee(id));
