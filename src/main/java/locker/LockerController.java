@@ -2,6 +2,8 @@ package locker;
 
 import locker.view.LockerView;
 
+import java.util.List;
+
 public class LockerController {
 
     private final LockerView lockerView;
@@ -40,7 +42,12 @@ public class LockerController {
     }
 
     private void lock() {
-        lockerView.show(lockerView.status(lockerService.getEmptyLockerIds()));
+        if (lockerService.isAllInUse()) {
+            lockerView.writeNoEmptyLockers();
+            return;
+        }
+        List<Integer> emptyLockerIds = lockerService.getEmptyLockerIds();
+        lockerView.show(lockerView.status(emptyLockerIds));
         readIdForLocking();
         lockerView.readEnter();
     }
@@ -48,7 +55,8 @@ public class LockerController {
     private void readIdForLocking() {
         try {
             lockerView.writeLockerNumberCommandForLocking();
-            Long idInput = lockerView.readLockerIdInput();
+            Integer idInput = lockerView.readLockerIdInput();
+            lockerService.getEmptyLocker(idInput);
             lockerView.writeLockerPassword(idInput, lockerService.lock(idInput));
         } catch (RuntimeException e) {
             lockerView.show("\n" + e.getMessage() + "\n");
@@ -57,22 +65,36 @@ public class LockerController {
     }
 
     private void unlock() {
-        lockerView.show(lockerView.status(lockerService.getEmptyLockerIds()));
-        readIdForUnlocking();
-        lockerView.readEnter();
-    }
-
-    private void readIdForUnlocking() {
+        List<Integer> emptyLockerIds = lockerService.getEmptyLockerIds();
+        if (emptyLockerIds.isEmpty()) {
+            lockerView.writeNoLockersInUse();
+            return;
+        }
+        lockerView.show(lockerView.status(emptyLockerIds));
+        Integer id = readIdForUnlocking();
         try {
-            lockerView.writeLockerNumberCommandForUnlocking();
-            Long idInput = lockerView.readLockerIdInput();
-            lockerView.writePasswordInputCommand();
-            Long fee = lockerService.unlock(idInput, lockerView.readPasswordInput());
-            lockerView.writeLockerFee(idInput, fee);
+            lockerView.writeLockerFee(id, unlockAndGetFee(id));
+            lockerView.readEnter();
         } catch (RuntimeException e) {
             lockerView.show("\n" + e.getMessage() + "\n");
-            readIdForUnlocking();
         }
+    }
+
+    private Integer readIdForUnlocking() {
+        try {
+            lockerView.writeLockerNumberCommandForUnlocking();
+            Integer idInput = lockerView.readLockerIdInput();
+            lockerService.getLockerInUse(idInput);
+            return idInput;
+        } catch (RuntimeException e) {
+            lockerView.show("\n" + e.getMessage() + "\n");
+            return readIdForUnlocking();
+        }
+    }
+
+    private Long unlockAndGetFee(Integer id) throws RuntimeException {
+        lockerView.writePasswordInputCommand();
+        return lockerService.unlock(id, lockerView.readPasswordInput());
     }
 
     private void exit() {

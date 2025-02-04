@@ -12,24 +12,24 @@ import java.util.concurrent.ConcurrentSkipListMap;
 
 public class MemoryLockerRepository implements LockerRepository {
 
-    private static final Map<Long, Locker> lockers = new ConcurrentSkipListMap<>(Comparator.comparingLong(id -> id));
+    private static final Map<Integer, Locker> lockers = new ConcurrentSkipListMap<>(Comparator.comparingInt(id -> id));
 
     static {
-        for (Long id = 1L; id <= 9L; id++) {
+        for (Integer id = 1; id <= 9; id++) {
             lockers.put(id, new Locker(id, Size.SMALL));
         }
 
-        for (Long id = 10L; id <= 14L; id++) {
+        for (Integer id = 10; id <= 14; id++) {
             lockers.put(id, new Locker(id, Size.MEDIUM));
         }
 
-        for (Long id = 15L; id <= 16L; id++) {
+        for (Integer id = 15; id <= 16; id++) {
             lockers.put(id, new Locker(id, Size.LARGE));
         }
     }
 
     @Override
-    public Optional<Locker> getLocker(Long id) {
+    public Optional<Locker> getLocker(Integer id) {
         return Optional.ofNullable(lockers.get(id));
     }
 
@@ -41,5 +41,10 @@ public class MemoryLockerRepository implements LockerRepository {
     @Override
     public List<Locker> getLockersInUse() {
         return lockers.values().stream().filter(locker -> locker instanceof LockerInUse).toList();
+    }
+
+    @Override
+    public boolean isAllInUse() {
+        return getLockersInUse().size() == 16;
     }
 }

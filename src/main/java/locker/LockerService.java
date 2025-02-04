@@ -21,24 +21,25 @@ public class LockerService {
         this.lockerRepository = lockerRepository;
     }
 
-    public String lock(Long lockerId) {
-        Locker existingLocker = lockerRepository.getLocker(lockerId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 번호의 보관함이 존재하지 않습니다."));
-        if (existingLocker instanceof LockerInUse) {
-            throw new IllegalStateException("해당 보관함은 이미 사용 중입니다.");
-        }
+    public String lock(Integer lockerId) {
+        Locker emptyLocker = getEmptyLocker(lockerId);
+        String password = passwordGenerator.generate();
         lockerRepository.replaceLocker(new LockerInUse(
-                lockerId, existingLocker.getSize(), dateTimeGenerator.generate(), passwordGenerator.generate()
-        ));
-        return passwordGenerator.generate();
+                lockerId, emptyLocker.getSize(), dateTimeGenerator.generate(), password));
+        return password;
     }
 
-    public Long unlock(Long lockerId, String passwordInput) {
-        Locker existingLocker = lockerRepository.getLocker(lockerId)
+    public Locker getEmptyLocker(Integer lockerId) {
+        Locker emptyLocker = lockerRepository.getLocker(lockerId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 번호의 보관함이 존재하지 않습니다."));
-        if (!(existingLocker instanceof LockerInUse lockerInUse)) {
-            throw new IllegalStateException("해당 보관함은 비어 있습니다.");
+        if (emptyLocker instanceof LockerInUse) {
+            throw new IllegalStateException("해당 보관함은 이미 사용 중입니다.");
         }
+        return emptyLocker;
+    }
+
+    public Long unlock(Integer lockerId, String passwordInput) {
+        LockerInUse lockerInUse = getLockerInUse(lockerId);
         if (!lockerInUse.matchPassword(passwordInput)) {
             throw new IllegalStateException("틀린 암호입니다.");
         }
@@ -47,7 +48,20 @@ public class LockerService {
         return lockerInUse.calculateFee(endDateTime);
     }
 
-    public List<Long> getEmptyLockerIds() {
+    public LockerInUse getLockerInUse(Integer lockerId) {
+        Locker existingLocker = lockerRepository.getLocker(lockerId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 번호의 보관함이 존재하지 않습니다."));
+        if (!(existingLocker instanceof LockerInUse lockerInUse)) {
+            throw new IllegalStateException("해당 보관함은 비어 있습니다.");
+        }
+        return lockerInUse;
+    }
+
+    public List<Integer> getEmptyLockerIds() {
         return lockerRepository.getLockersInUse().stream().map(Locker::getId).toList();
+    }
+
+    public boolean isAllInUse() {
+        return lockerRepository.isAllInUse();
     }
 }

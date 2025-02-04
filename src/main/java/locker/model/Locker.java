@@ -2,17 +2,17 @@ package locker.model;
 
 public class Locker {
 
-    private final Long id;
+    private final Integer id;
     private final Size size;
 
-    public Locker(Long id, Size size) {
+    public Locker(Integer id, Size size) {
         validateId(id);
         validateSize(size);
         this.id = id;
         this.size = size;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -20,7 +20,7 @@ public class Locker {
         return size;
     }
 
-    private void validateId(Long id) {
+    private void validateId(Integer id) {
         if (id == null) {
             throw new IllegalArgumentException("Locker의 id는 null일 수 없습니다.");
         }

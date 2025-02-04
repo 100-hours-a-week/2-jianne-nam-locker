@@ -8,7 +8,7 @@ public class LockerInUse extends Locker {
     private final LocalDateTime createdAt;
     private final String password;
 
-    public LockerInUse(Long id, Size size, LocalDateTime createdAt, String password) {
+    public LockerInUse(Integer id, Size size, LocalDateTime createdAt, String password) {
         super(id, size);
         this.createdAt = createdAt;
         this.password = password;

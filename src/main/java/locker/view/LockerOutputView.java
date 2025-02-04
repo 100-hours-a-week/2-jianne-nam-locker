@@ -5,12 +5,12 @@ import java.util.List;
 public final class LockerOutputView extends LockerView {
 
     private static final int COL = 5;
-    private static final Long[] ids = { 1L, 2L, 3L, 10L, 11L, 4L, 5L, 6L, 7L, 8L, 9L, 15L, 16L, 12L, 13L, 14L };
+    private static final Integer[] ids = { 1, 2, 3, 10, 11, 4, 5, 6, 7, 8, 9, 15, 16, 12, 13, 14 };
 
     private StringBuilder message;
     private int idx;
 
-    public String status(List<Long> usingLockerIds) {
+    public String status(List<Integer> usingLockerIds) {
         this.idx = 0;
         this.message = new StringBuilder("\n보관함의 현재 상태는 다음과 같습니다.\n\n");
 
@@ -56,7 +56,7 @@ public final class LockerOutputView extends LockerView {
         return message.toString();
     }
 
-    private void addIdIfEmpty(int count, List<Long> usingLockerIds) {
+    private void addIdIfEmpty(int count, List<Integer> usingLockerIds) {
         for (int i = 0; i < count; i++) {
             if (usingLockerIds.contains(ids[idx])) {
                 message.append("  ").append(String.format("%2s", "X")).append("   |");
