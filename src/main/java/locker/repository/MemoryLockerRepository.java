@@ -42,4 +42,9 @@ public class MemoryLockerRepository implements LockerRepository {
     public List<Locker> getLockersInUse() {
         return lockers.values().stream().filter(locker -> locker instanceof LockerInUse).toList();
     }
+
+    @Override
+    public boolean isAllInUse() {
+        return getLockersInUse().size() == 16;
+    }
 }
