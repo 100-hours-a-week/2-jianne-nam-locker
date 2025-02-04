@@ -60,4 +60,8 @@ public class LockerService {
     public List<Long> getEmptyLockerIds() {
         return lockerRepository.getLockersInUse().stream().map(Locker::getId).toList();
     }
+
+    public boolean isAllInUse() {
+        return lockerRepository.isAllInUse();
+    }
 }
