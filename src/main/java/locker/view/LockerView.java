@@ -72,5 +72,5 @@ public abstract class LockerView extends View {
         this.show(String.format("%d번 보관함이 열렸습니다. 물건을 꺼내고 문을 닫아 주세요.\n요금은 %s원입니다.\n결제 후 Enter를 눌러 주세요.\n", id, fee));
     }
 
-    public abstract String status(List<Long> occupiedLockerIds);
+    public abstract String status(List<Long> usingLockerIds);
 }

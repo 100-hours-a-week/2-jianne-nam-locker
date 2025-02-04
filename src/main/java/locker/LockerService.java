@@ -1,12 +1,12 @@
 package locker;
 
 import locker.model.Locker;
-import locker.model.OccupiedLocker;
+import locker.model.LockerInUse;
 import locker.repository.LockerRepository;
 import locker.util.DateTimeGenerator;
 import locker.util.PasswordGenerator;
 
-import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class LockerService {
@@ -24,10 +24,10 @@ public class LockerService {
     public String lock(Long lockerId) {
         Locker existingLocker = lockerRepository.getLocker(lockerId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 번호의 보관함이 존재하지 않습니다."));
-        if (existingLocker instanceof OccupiedLocker) {
+        if (existingLocker instanceof LockerInUse) {
             throw new IllegalStateException("해당 보관함은 이미 사용 중입니다.");
         }
-        lockerRepository.replaceLocker(new OccupiedLocker(
+        lockerRepository.replaceLocker(new LockerInUse(
                 lockerId, existingLocker.getSize(), dateTimeGenerator.generate(), passwordGenerator.generate()
         ));
         return passwordGenerator.generate();
@@ -36,18 +36,18 @@ public class LockerService {
     public Long unlock(Long lockerId, String passwordInput) {
         Locker existingLocker = lockerRepository.getLocker(lockerId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 번호의 보관함이 존재하지 않습니다."));
-        if (!(existingLocker instanceof OccupiedLocker occupiedLocker)) {
+        if (!(existingLocker instanceof LockerInUse lockerInUse)) {
             throw new IllegalStateException("해당 보관함은 비어 있습니다.");
         }
-        if (!occupiedLocker.matchPassword(passwordInput)) {
+        if (!lockerInUse.matchPassword(passwordInput)) {
             throw new IllegalStateException("틀린 암호입니다.");
         }
-        Long fee = occupiedLocker.calculateFee(Duration.between(occupiedLocker.getCreatedAt(), dateTimeGenerator.generate()).toMinutes());
-        lockerRepository.replaceLocker(new Locker(lockerId, occupiedLocker.getSize()));
-        return fee;
+        LocalDateTime endDateTime = dateTimeGenerator.generate();
+        lockerRepository.replaceLocker(new Locker(lockerId, lockerInUse.getSize()));
+        return lockerInUse.calculateFee(endDateTime);
     }
 
     public List<Long> getEmptyLockerIds() {
-        return lockerRepository.getOccupiedLockers().stream().map(Locker::getId).toList();
+        return lockerRepository.getLockersInUse().stream().map(Locker::getId).toList();
     }
 }

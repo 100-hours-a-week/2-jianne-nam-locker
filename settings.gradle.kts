@@ -1,2 +1,2 @@
-rootProject.name = "hw1-fullstack"
+rootProject.name = "2-jianne-nam-locker-service"
 

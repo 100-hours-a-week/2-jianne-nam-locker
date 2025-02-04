@@ -10,14 +10,14 @@ public final class LockerOutputView extends LockerView {
     private StringBuilder message;
     private int idx;
 
-    public String status(List<Long> occupiedLockerIds) {
+    public String status(List<Long> usingLockerIds) {
         this.idx = 0;
         this.message = new StringBuilder("\n보관함의 현재 상태는 다음과 같습니다.\n\n");
 
         addHorizontalLine(COL);
         message.append("\n|");
 
-        addIdIfEmpty(COL, occupiedLockerIds);
+        addIdIfEmpty(COL, usingLockerIds);
         message.append("\n");
 
         addHorizontalLine(COL-2);
@@ -25,14 +25,14 @@ public final class LockerOutputView extends LockerView {
         addVerticalLines(2);
         message.append("\n|");
 
-        addIdIfEmpty(COL-2, occupiedLockerIds);
+        addIdIfEmpty(COL-2, usingLockerIds);
         addVerticalLines(2);
         message.append("\n");
 
         addHorizontalLine(COL);
         message.append("\n|");
 
-        addIdIfEmpty(COL, occupiedLockerIds);
+        addIdIfEmpty(COL, usingLockerIds);
         message.append("\n");
 
         addHorizontalLine(COL-2);
@@ -40,7 +40,7 @@ public final class LockerOutputView extends LockerView {
         addVerticalLines(2);
         message.append("\n|");
 
-        addIdIfEmpty(COL-2, occupiedLockerIds);
+        addIdIfEmpty(COL-2, usingLockerIds);
         addVerticalLines(2);
         message.append("\n|");
 
@@ -56,9 +56,9 @@ public final class LockerOutputView extends LockerView {
         return message.toString();
     }
 
-    private void addIdIfEmpty(int count, List<Long> occupiedLockerIds) {
+    private void addIdIfEmpty(int count, List<Long> usingLockerIds) {
         for (int i = 0; i < count; i++) {
-            if (occupiedLockerIds.contains(ids[idx])) {
+            if (usingLockerIds.contains(ids[idx])) {
                 message.append("  ").append(String.format("%2s", "X")).append("   |");
             } else {
                 message.append("  ").append(String.format("%2d", ids[idx])).append("   |");

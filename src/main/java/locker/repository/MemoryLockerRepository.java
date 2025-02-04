@@ -1,7 +1,7 @@
 package locker.repository;
 
 import locker.model.Locker;
-import locker.model.OccupiedLocker;
+import locker.model.LockerInUse;
 import locker.model.Size;
 
 import java.util.Comparator;
@@ -39,7 +39,7 @@ public class MemoryLockerRepository implements LockerRepository {
     }
 
     @Override
-    public List<Locker> getOccupiedLockers() {
-        return lockers.values().stream().filter(locker -> locker instanceof OccupiedLocker).toList();
+    public List<Locker> getLockersInUse() {
+        return lockers.values().stream().filter(locker -> locker instanceof LockerInUse).toList();
     }
 }

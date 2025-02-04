@@ -9,5 +9,5 @@ public interface LockerRepository {
 
     Optional<Locker> getLocker(Long id);
     void replaceLocker(Locker locker);
-    List<Locker> getOccupiedLockers();
+    List<Locker> getLockersInUse();
 }
