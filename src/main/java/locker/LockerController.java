@@ -46,7 +46,7 @@ public class LockerController {
             lockerView.writeNoEmptyLockers();
             return;
         }
-        List<Long> emptyLockerIds = lockerService.getEmptyLockerIds();
+        List<Integer> emptyLockerIds = lockerService.getEmptyLockerIds();
         lockerView.show(lockerView.status(emptyLockerIds));
         readIdForLocking();
         lockerView.readEnter();
@@ -55,7 +55,7 @@ public class LockerController {
     private void readIdForLocking() {
         try {
             lockerView.writeLockerNumberCommandForLocking();
-            Long idInput = lockerView.readLockerIdInput();
+            Integer idInput = lockerView.readLockerIdInput();
             lockerService.getEmptyLocker(idInput);
             lockerView.writeLockerPassword(idInput, lockerService.lock(idInput));
         } catch (RuntimeException e) {
@@ -65,13 +65,13 @@ public class LockerController {
     }
 
     private void unlock() {
-        List<Long> emptyLockerIds = lockerService.getEmptyLockerIds();
+        List<Integer> emptyLockerIds = lockerService.getEmptyLockerIds();
         if (emptyLockerIds.isEmpty()) {
             lockerView.writeNoLockersInUse();
             return;
         }
         lockerView.show(lockerView.status(emptyLockerIds));
-        Long id = readIdForUnlocking();
+        Integer id = readIdForUnlocking();
         try {
             lockerView.writeLockerFee(id, unlockAndGetFee(id));
             lockerView.readEnter();
@@ -80,10 +80,10 @@ public class LockerController {
         }
     }
 
-    private Long readIdForUnlocking() {
+    private Integer readIdForUnlocking() {
         try {
             lockerView.writeLockerNumberCommandForUnlocking();
-            Long idInput = lockerView.readLockerIdInput();
+            Integer idInput = lockerView.readLockerIdInput();
             lockerService.getLockerInUse(idInput);
             return idInput;
         } catch (RuntimeException e) {
@@ -92,7 +92,7 @@ public class LockerController {
         }
     }
 
-    private Long unlockAndGetFee(Long id) throws RuntimeException {
+    private Long unlockAndGetFee(Integer id) throws RuntimeException {
         lockerView.writePasswordInputCommand();
         return lockerService.unlock(id, lockerView.readPasswordInput());
     }
