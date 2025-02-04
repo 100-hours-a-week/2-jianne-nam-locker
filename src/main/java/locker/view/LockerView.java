@@ -61,7 +61,7 @@ public abstract class LockerView extends View {
     }
 
     public void writeLockerPassword(Long id, String password) {
-        this.show(String.format("%d번 보관함이 열렸습니다. 물건을 넣고 문을 닫아 주세요.\n비밀번호는 %s입니다.\n처음으로 돌아가려면 Enter를 눌러 주세요.\n", id, password));
+        this.show(String.format("%d번 보관함이 열렸습니다. 물건을 넣고 문을 닫아 주세요.\n비밀번호는 %s 입니다.\n처음으로 돌아가려면 Enter를 눌러 주세요.\n", id, password));
     }
 
     public void writePasswordInputCommand() {

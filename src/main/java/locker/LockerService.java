@@ -27,10 +27,10 @@ public class LockerService {
         if (existingLocker instanceof LockerInUse) {
             throw new IllegalStateException("해당 보관함은 이미 사용 중입니다.");
         }
+        String password = passwordGenerator.generate();
         lockerRepository.replaceLocker(new LockerInUse(
-                lockerId, existingLocker.getSize(), dateTimeGenerator.generate(), passwordGenerator.generate()
-        ));
-        return passwordGenerator.generate();
+                lockerId, existingLocker.getSize(), dateTimeGenerator.generate(), password));
+        return password;
     }
 
     public Long unlock(Long lockerId, String passwordInput) {
